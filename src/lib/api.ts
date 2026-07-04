@@ -37,3 +37,64 @@ export async function getServiceRequests() {
 
   return res.json();
 }
+
+// Download a document (returns a blob we can save)
+export async function downloadDocument(docId: string, fileName: string) {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_BASE}/service-requests/documents/${docId}/download`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to download document");
+  }
+
+  // Turn the response into a downloadable file
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+}
+
+// Update a request's status
+export async function updateStatus(requestId: string, status: string) {
+  const res = await fetch(`${API_BASE}/service-requests/${requestId}/status`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ status }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to update status");
+  }
+
+  return res.json();
+}
+
+// Upload an acknowledgement file to a request
+export async function uploadAcknowledgement(requestId: string, file: File, referenceNo?: string) {
+  const token = localStorage.getItem("token");
+
+  const formData = new FormData();
+  formData.append("file", file);
+  if (referenceNo) formData.append("referenceNo", referenceNo);
+
+  const res = await fetch(`${API_BASE}/service-requests/${requestId}/acknowledgement`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }, // NOTE: no Content-Type here
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Failed to upload acknowledgement");
+  }
+
+  return res.json();
+}
