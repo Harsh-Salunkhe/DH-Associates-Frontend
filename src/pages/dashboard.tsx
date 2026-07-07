@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getServiceRequests, downloadDocument, updateStatus, uploadAcknowledgement } from "../lib/api";
+import { getServiceRequests, downloadDocument, updateStatus, uploadAcknowledgement, logout } from "../lib/api";
 export default function Dashboard() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,9 +43,18 @@ async function handleAckUpload(requestId: string, file: File) {
 }
   return (
     <div className="min-h-screen bg-[#FAF9F6] p-12">
-      <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Staff Dashboard</h1>
-      <p className="text-neutral-600 mb-8">All service requests</p>
-
+     <div className="flex justify-between items-start mb-8">
+  <div>
+    <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Staff Dashboard</h1>
+    <p className="text-neutral-600">All service requests</p>
+  </div>
+  <button
+    onClick={logout}
+    className="text-sm font-semibold px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:border-[#B8932E] hover:text-[#B8932E] transition-colors"
+  >
+    Log Out
+  </button>
+</div>
       {loading && <p className="text-neutral-500">Loading requests...</p>}
       {error && <p className="text-red-600">{error}</p>}
 

@@ -169,3 +169,10 @@ export async function uploadDocument(requestId: string, file: File) {
 
   return res.json();
 }
+
+// Log out: clear stored auth and return to login
+export function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.href = "/login";
+}

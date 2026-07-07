@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getMyRequests, downloadAcknowledgement, createRequest, uploadDocument } from "../lib/api";
+import { getMyRequests, downloadAcknowledgement, createRequest, uploadDocument, logout } from "../lib/api";
 export default function Portal() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,8 +57,18 @@ async function handleDocUpload(requestId: string, file: File) {
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] p-12">
-      <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Client Portal</h1>
-      <p className="text-neutral-600 mb-8">Your compliance requests</p>
+      <div className="flex justify-between items-start mb-8">
+  <div>
+    <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Client Portal</h1>
+    <p className="text-neutral-600">Your compliance requests</p>
+  </div>
+  <button
+    onClick={logout}
+    className="text-sm font-semibold px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:border-[#B8932E] hover:text-[#B8932E] transition-colors"
+  >
+    Log Out
+  </button>
+</div>
       <div className="bg-white rounded-xl border border-neutral-200 p-6 mb-8">
   <h2 className="font-bold text-[#1A1A1A] mb-4">New Request</h2>
 
