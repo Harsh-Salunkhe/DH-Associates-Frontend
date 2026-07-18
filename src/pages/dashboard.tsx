@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getServiceRequests, downloadDocument, updateStatus, uploadAcknowledgement, logout } from "../lib/api";
+import { Link } from "react-router-dom";
 export default function Dashboard() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,13 +49,18 @@ async function handleAckUpload(requestId: string, file: File) {
     <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Staff Dashboard</h1>
     <p className="text-neutral-600">All service requests</p>
   </div>
+  
   <button
     onClick={logout}
     className="text-sm font-semibold px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:border-[#B8932E] hover:text-[#B8932E] transition-colors"
   >
     Log Out
   </button>
+  <Link to="/employees" className="text-sm font-semibold px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:border-[#B8932E] hover:text-[#B8932E] transition-colors">
+  Manage Employees
+</Link>
 </div>
+
       {loading && <p className="text-neutral-500">Loading requests...</p>}
       {error && <p className="text-red-600">{error}</p>}
 

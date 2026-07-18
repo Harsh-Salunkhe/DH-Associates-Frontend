@@ -170,9 +170,50 @@ export async function uploadDocument(requestId: string, file: File) {
   return res.json();
 }
 
+// Admin: get all employees
+export async function getEmployees() {
+  const res = await fetch(`${API_BASE}/employees`, { headers: authHeaders() });
+  if (!res.ok) throw new Error((await res.json()).error || "Failed to load employees");
+  return res.json();
+}
+
+// Admin: create a new employee
+export async function createEmployee(data: {
+  email: string; password: string; name: string;
+  phone?: string; designation?: string; department?: string;
+}) {
+  const res = await fetch(`${API_BASE}/employees`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).error || "Failed to create employee");
+  return res.json();
+}
+
+// Admin: deactivate an employee
+export async function deactivateEmployee(id: string) {
+  const res = await fetch(`${API_BASE}/employees/${id}/deactivate`, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error((await res.json()).error || "Failed to deactivate");
+  return res.json();
+}
+
 // Log out: clear stored auth and return to login
 export function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   window.location.href = "/login";
+}
+
+// Admin: reactivate an employee
+export async function reactivateEmployee(id: string) {
+  const res = await fetch(`${API_BASE}/employees/${id}/reactivate`, {
+    method: "PATCH",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error((await res.json()).error || "Failed to reactivate");
+  return res.json();
 }
